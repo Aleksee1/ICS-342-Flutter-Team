@@ -1,128 +1,257 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(
+    home: const RunMyApp(),
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(primarySwatch: Colors.blue),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class RunMyApp extends StatelessWidget {
+  const RunMyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Page'),
       ),
-      home: const MyHomePage(title: 'Flutter Project Home Page'),
+      body: Center(
+        child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NextPage()
+                  )
+              );
+            },
+            child: const Text('Go to the Calculator Page')
+        ),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class NextPage extends StatelessWidget {
+  const NextPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: CalcPage(),
+    );
+  }
+}
+
+class CalcPage extends StatefulWidget {
+  const CalcPage({super.key});
+
+  @override
+  _CalcPageState createState() => _CalcPageState();
+}
+
+class _CalcPageState extends State<CalcPage> {
+  var userInput = '';
+  var answer = '';
+
+  final List<String> buttons = [
+    'C',
+    'DEL',
+    '+/-',
+    '%',
+    '1',
+    '2',
+    '3',
+    '/',
+    '4',
+    '5',
+    '6',
+    '*',
+    '7',
+    '8',
+    '9',
+    '-',
+    '0',
+    '.',
+    '=',
+    '+',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text("Calculator"),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Hello World!',
+      backgroundColor: Colors.white12,
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(15),
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      userInput,
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      answer,
+                      style: const TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ]
             ),
-            const Text(
-              'You have pushed the button this many times:',
+          ),
+          Expanded(
+            flex: 4,
+            child: GridView.builder(
+                itemCount: buttons.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  // Clear Button
+                  if (index == 0) {
+                    return MyButton(
+                      buttontapped: () {
+                        setState(() {
+                          userInput = '';
+                          answer = '0';
+                        });
+                      },
+                      buttonText: buttons[index],
+                      color: Colors.white,
+                      textColor: Colors.black,
+                    );
+                  }
+
+                  // DELete button
+                  else if (index == 1) {
+                    return MyButton(
+                      buttontapped: () {
+                        setState(() {
+                          userInput =
+                              userInput.substring(0, userInput.length - 1);
+                        });
+                      },
+                      buttonText: buttons[index],
+                      color: Colors.white,
+                      textColor: Colors.black,
+                    );
+                  }
+
+                  // +/- Button
+                  else if (index == 2) {
+                    return MyButton(
+                      buttontapped: () {
+                        if (userInput[0] == '-') {
+                          setState(() {
+                            userInput =
+                                userInput.substring(1, userInput.length);
+                          });
+                        } else if (userInput[0] != '-') {
+                          setState(() {
+                            userInput = '-$userInput';
+                          });
+                        }
+                      },
+                      buttonText: buttons[index],
+                      color: Colors.white,
+                      textColor: Colors.black,
+                    );
+                  }
+
+                  // Equals To Button
+                  else if (index == 18) {
+                    return MyButton(
+                      buttontapped: () {
+                        setState(() {
+                          equalPressed();
+                        });
+                      },
+                      buttonText: buttons[index],
+                      color: Colors.white,
+                      textColor: Colors.black,
+                    );
+                  }
+
+                  // Other buttons
+                  else {
+                    return MyButton(
+                      buttontapped: () {
+                        setState(() {
+                          userInput += buttons[index];
+                        });
+                      },
+                      buttonText: buttons[index],
+                      color: Colors.white,
+                      textColor: Colors.black,
+                    );
+                  }
+                }
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void equalPressed() {
+    Parser parser = Parser();
+    Expression expression = parser.parse(userInput);
+    ContextModel contextModel = ContextModel();
+    double eval = expression.evaluate(EvaluationType.REAL, contextModel);
+    answer = eval.toString();
+  }
+}
+
+class MyButton extends StatelessWidget {
+  final color;
+  final textColor;
+  final String buttonText;
+  final buttontapped;
+
+  const MyButton(
+      {super.key,
+      this.color,
+      this.textColor,
+      required this.buttonText,
+      this.buttontapped});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: buttontapped,
+      child: Padding(
+        padding: const EdgeInsets.all(0.2),
+        child: Container(
+          color: color,
+          child: Center(
+            child: Text(
+              buttonText,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
